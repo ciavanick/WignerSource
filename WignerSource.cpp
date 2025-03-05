@@ -37,7 +37,7 @@ private:
         return wignerSource(x,pm) * jacobian;
     }
 
-    static double Jacobianww(double *x,double *pm){
+    static double Jacobianw2(double *x,double *pm){
         double r = x[0];
         double p = x[1];
     
@@ -53,7 +53,7 @@ private:
         double r = x[0];
         double p = x[1];
     
-        return wignerSource(x,pm) * Jacobianww(x,pm);
+        return wignerSource(x,pm) * Jacobianw2(x,pm);
     }
 
      //integration method
@@ -66,6 +66,21 @@ private:
         }
         res *= m_dx*m_dp;
         return res;
+      }
+
+      double normalization(){
+        TString jacobname = m_name + "jacob";
+
+        //to compute the normalization a new TF2 is created and is just W x jacobian, then is integrated with myintegral
+        TF2* jacobw1 = new TF2(jacobname, JacobianFun,  m_minX, m_maxX, m_minP, m_maxP, 5);
+        jacobw1->SetParameter(0, 1.);
+        jacobw1->SetParameter(1, m_r0);
+        jacobw1->SetParameter(2, m_k);
+        jacobw1->SetParameter(3, m_hcut);
+        jacobw1->SetParameter(4, m_ndim);
+
+        return 1./myintegral(jacobw1);
+        
       }
 
 public:
@@ -89,17 +104,7 @@ public:
         m_w->SetParameter(3, m_hcut);
         m_w->SetParameter(4, m_ndim);
 
-        TString jacobname = m_name + "jacob";
-
-        //to compute the normalization a new TF2 is created and is just W x jacobian, then is integrated with myintegral
-        TF2* jacobw1 = new TF2(jacobname, JacobianFun,  m_minX, m_maxX, m_minP, m_maxP, 5);
-        jacobw1->SetParameter(0, 1.);
-        jacobw1->SetParameter(1, r0);
-        jacobw1->SetParameter(2, k);
-        jacobw1->SetParameter(3, m_hcut);
-        jacobw1->SetParameter(4, m_ndim);
-
-        m_const = 1./myintegral(jacobw1);
+        m_const = normalization();
         m_w->SetParameter(0, m_const);
 
     }
@@ -126,12 +131,37 @@ public:
         return myintegral(wTimesw)*TMath::Power(4*m_hcut*TMath::Pi(),m_ndim);
     }
 
+    void SetR(float r0){
+        m_r0 = r0;
+        m_w->SetParameter(1, m_r0); 
+        m_const = normalization();
+        m_w->SetParameter(0, m_const);
+    }
+    void SetK(float k){
+        m_k = k;
+        m_w->SetParameter(2, m_k); 
+        m_const = normalization();
+        m_w->SetParameter(0, m_const);
+    }
+    void SetRK(float r0, float k){
+        m_r0 = r0;
+        m_k = k;
+        m_w->SetParameter(1, m_r0); 
+        m_w->SetParameter(0, m_const);
+        m_const = normalization();
+        m_w->SetParameter(0, m_const);
+
+    }
+
 };
 
 
 
 void WignerSource(){
     auto fw = wignerfunction(5., 50., 3, 0.,50.,0,300, "w");
+    std::cout<<"Normalization: "<<fw.NormalizationConstant()<<"\n";
+    std::cout<<"W x W = "<<fw.WignerForItself()<<"\n";
+    fw.SetRK(5., 200);
     std::cout<<"Normalization: "<<fw.NormalizationConstant()<<"\n";
     std::cout<<"W x W = "<<fw.WignerForItself()<<"\n";
     fw.DrawWigner("SURF2");

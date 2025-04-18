@@ -8,9 +8,11 @@ class wignerSource{
         wignerSource(TString name = "") : mName(name) {}
         void initFunctions();
         void setFunctionsParameters();
-        void setRadius(double r0);
+        void setRadius(double radius);
+        void setR0(double r0);
         void setRadiusK(double r0);
         void setKstar(double k);
+        void setKIn(double k);
         void setRanges(double xmin, double ymin, double xmax, double ymax);
         void setMu(double mu);
         void setRWidth(double rWidth);
@@ -26,6 +28,9 @@ class wignerSource{
         TF2* getWignerKinetic();
         TF2* getWignerPotential();
         TF2* getWignerHamiltonan();
+        TF2* getWignerDeuteron();
+        TF2* getWignerDeuteronIntegral();
+        TF2* getCoalescenceProbability();
 
         double getNorm();
         double getwK();
@@ -40,22 +45,26 @@ class wignerSource{
         double getMu();
         double getRWidth();
         double getV0();
+        double getcoal();
+        double getDeuteronInt();
         
         double checkWxW();
 
     private:
-        double mR0 = 5.;
+        double mR0 = 1.;
+        double mRadius = 1.;
         double mKStar = 0.050;
+        double mKin = 0.050;
         double mNorm = 1.;
         double mMu = 0.938/2;
-        double mRWidth = 2.1;
-        double mV0 = -0.0337;
+        double mRWidth = 3.2; //2.1
+        double mV0 = -17.4E-3; //-0.0337
         TString mName = "";
 
         double mRMin = 0;
-        double mRMax = 50;
+        double mRMax = 20;
         double mPMin = 0;
-        double mPMax = 0.300;
+        double mPMax = 0.6;
 
         TF2 *mW = nullptr;
         TF2 *mWxW = nullptr;
@@ -67,6 +76,9 @@ class wignerSource{
         TF2 *mWK = nullptr;
         TF2 *mWV = nullptr;
         TF2 *mWH = nullptr;
+        TF2 *mD = nullptr;
+        TF2 *mDInt = nullptr;
+        TF2 *mC = nullptr;
 
         void setThreeParam(TF2 *function);
         void setFourParam(TF2 *function);

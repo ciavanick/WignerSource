@@ -2,6 +2,8 @@
 #define CWIGNERUTILS
 
 #include "TF2.h"
+#include "TFile.h"
+#include "TH2.h"
 
 class wignerUtils{
     public:
@@ -15,9 +17,13 @@ class wignerUtils{
         static double wK(double *x, double *pm);
         static double wH(double *x, double *pm);
         static double wV(double *x, double *pm);
-        static double rSource(double k);
+        static double wignerDeuteron(double *x, double *pm);
+        static double wignerDeuteronIntegral(double *x, double *pm);
+        static double coalescenceProbability(double *x, double *pm);
+        static double radius(double k, double r0);
+        static double kStarEff(double k, double radius);
 
-        static double integral(TF2 *function);
+        static double integral(TF2 *function, double minX = mMinX, double maxX = mMaxX, double minP = mMinP, double maxP = mMaxP);
 
         static double getMinX();
         static double getMaxX();
@@ -38,6 +44,10 @@ class wignerUtils{
         static double mMaxP;
         static double mDx;
         static double mDp;
+        static double mFactor;
+
+        static TH2D* mH;
+        static TFile *mFileDeuteron;
 };
 
 #endif

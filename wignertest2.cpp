@@ -6,7 +6,7 @@ void wignertest2()
     fw->setRanges(0., 20, 0., 0.6);
     fw->setR0(1.);
 
-    TString s = "data4/data.root";
+    TString s = "data.root";
 
     TFile *file = new TFile(s, "RECREATE");
     std::cout << "Creating " << s << "\n";

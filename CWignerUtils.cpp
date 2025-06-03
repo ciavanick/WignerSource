@@ -223,6 +223,14 @@ void wignerUtils::setIntegrationRanges(double minX, double maxX, double minP, do
 double wignerUtils::integral(TF2 *function, double minX, double maxX, double minP, double maxP)
 {
     double res = 0;
-    res = function->Integral(minX, maxX, minP, maxP);
+    //res = function->Integral(minX, maxX, minP, maxP);
+    for (float x = mDx / 2 + minX; x < maxX; x += mDx)
+     {
+         for (float p = mDp / 2 + minP; p < maxP; p += mDp)
+         {
+             res += function->Eval(x, p);
+         }
+     }
+     res *= mDx * mDp;
     return res;
 }

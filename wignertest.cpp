@@ -3,7 +3,8 @@
 void wignertest(){
     wignerSource *fw = new wignerSource;
     fw->initFunctions();
-    fw->setRanges(0.,50, 0., 0.5);
+    fw->setRanges(0.,50, 0., 1.0);
+    fw->setR0(1.);
 
     TString s = "data4/data.root";
 
@@ -22,10 +23,10 @@ void wignertest(){
     tree->Branch("k", &k, "k/D");
 
     auto w = fw->getWignerFunction();
-    for(double i = 0.01; i < 0.3; i = i + 0.01){
+    for(double i = 0.01; i < 0.8; i = i + 0.01){
         fw->setRadiusK(i);
         r0 = fw->getRadius();
-        k = fw->getKStar();
+        k = i;
         norm = fw->getNorm();
         WW = fw->checkWxW();
         wK = fw->getwK();

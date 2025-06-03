@@ -17,26 +17,39 @@
 - [ROOT Framework](https://root.cern/)
   - Ensure `root-config` is available in your environment
 - C++17 or higher
-- Bash (for running `run.sh`)
+- cmake
 
 ---
 
-## Installation
+## Compilation and Installation
 
 Clone the repository:
 
 ```bash
 git clone https://github.com/ciavanick/WignerSource.git
 cd WignerSource
+mkdir build && cd build
+cmake .. -DCMAKE_INSTALL_PREFIX=..
+cmake --build .
+cmake --install .
+cd ..
 ```
 
-## How to Compile and Run
-
-To run the code, you need to compile `CWignerSource.cpp` and `CWignerUtils.cpp`, and link them properly with ROOT.  
-This is handled automatically via the `run.sh` script and the `rootlogon.C` file.
-
-On the first run, execute:
+## How to Run
 
 ```bash
-source run.sh
+root -l wignertest2.cpp
+```
+## Docker
+
+```bash
+docker build -t wignerutils .
+docker run --rm -it wignerutils 
+```
+
+If you have an arm achitecture:
+
+```bash
+docker build --platform linux/amd64 -t wignerutils .
+docker run --platform linux/amd64 --rm -it wignerutils 
 ```

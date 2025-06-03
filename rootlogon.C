@@ -1,4 +1,3 @@
 {
-    //gROOT->LoadMacro(".L CWignerUtils.h");
-    gSystem->Load("libWignerUtils.so");
+    gSystem->Load("lib/libWignerUtils.so");
 }

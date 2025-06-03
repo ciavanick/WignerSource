@@ -1,4 +1,3 @@
-#include "CWignerSource.h"
 
 void wignertest2()
 {
@@ -29,7 +28,7 @@ void wignertest2()
     int np = 0;
     double mRed = 0.938 / 2;
     double mRdeu = 3.2;
-    for (double i = 1E-3 / 2; i < 0.5; i += 2E-3)
+    for (double i = 1E-3 / 2; i < 0.1; i += 2E-3)
     {
         xk[np] = i;
         fw->setRadiusK(i);

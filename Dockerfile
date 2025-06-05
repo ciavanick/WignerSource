@@ -2,7 +2,7 @@ FROM rootproject/root:latest
 
 # Install system packages (if needed for ROOT or build tools)
 RUN apt-get update && \
-    apt-get install -y cmake g++ make && \
+    apt-get install -y cmake g++ make time bc && \
     rm -rf /var/lib/apt/lists/*
 
 # Set working directory
@@ -20,5 +20,7 @@ RUN mkdir build && cd build && \
 # Confirm shared libraries were built
 RUN ls /wigner/lib
 
+RUN chmod +x simulation.sh
+
 # Run ROOT test with macro
-CMD root -l -q wignertest2.cpp++
+CMD ./simulation.sh 0.001 0.5 $(nproc) 0.005 simtest data

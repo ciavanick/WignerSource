@@ -1,5 +1,6 @@
 #!/bin/bash
 set -euo pipefail
+source wignerenv.sh
 
 # Usage:
 # ./simulation.sh <start> <end> <n_jobs> <increment> <output_folder> <file_prefix>
@@ -42,7 +43,7 @@ for ((i=0; i<NJOBS; i++)); do
     fi
 
     # Run the ROOT macro in the background
-    root -l -b -q "wignersim.cpp($JOB_START, $JOB_END, $INCREMENT, \"$OUTFILE\")" &
+    wigneroot -l -b -q "macros/wignersim.cpp($JOB_START, $JOB_END, $INCREMENT, \"$OUTFILE\")" &
 done
 
 # Wait for all background jobs to complete
@@ -53,4 +54,4 @@ MERGED="$OUTDIR/${PREFIX}_merged.root"
 echo "Merging to $MERGED"
 hadd -f "$MERGED" "$OUTDIR/${PREFIX}_part_"*.root
 
-echo "✅ All done. Merged output: $MERGED"
+echo "All done. Merged output: $MERGED"

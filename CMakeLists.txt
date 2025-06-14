@@ -21,41 +21,63 @@ set(SOURCES
     ${SOURCE_DIR}/CWignerUtils.cpp
 )
 
-# Main library
-add_library(WignerUtils SHARED ${SOURCES})
-target_include_directories(WignerUtils PRIVATE ${INCLUDE_DIR} ${ROOT_INCLUDE_DIRS})
-target_link_libraries(WignerUtils PRIVATE ${ROOT_LIBRARIES})
-set_target_properties(WignerUtils PROPERTIES POSITION_INDEPENDENT_CODE ON)
-
-# Install main library and headers
-install(TARGETS WignerUtils LIBRARY DESTINATION lib)
-install(DIRECTORY ${INCLUDE_DIR}/ DESTINATION include FILES_MATCHING PATTERN "*.h")
-
-# =======================
-# ROOT DICTIONARY SECTION
-# =======================
-
-# Dictionary headers
+# ========================================
+# ROOT Dictionary Generation
+# ========================================
 set(DICT_HEADERS
     ${INCLUDE_DIR}/CWignerSource.h
     ${INCLUDE_DIR}/CWignerUtils.h
 )
 
-# Generate dictionary (note MODULE is needed for .pcm)
 ROOT_GENERATE_DICTIONARY(G__WignerUtils
     ${DICT_HEADERS}
     LINKDEF ${CMAKE_CURRENT_SOURCE_DIR}/WignerLinkDef.h
-    MODULE WignerUtils
 )
 
-# Dictionary library
-add_library(WignerDict SHARED G__WignerUtils.cxx)
-target_include_directories(WignerDict PRIVATE ${INCLUDE_DIR} ${ROOT_INCLUDE_DIRS})
-target_link_libraries(WignerDict PRIVATE WignerUtils ${ROOT_LIBRARIES})
-set_target_properties(WignerDict PROPERTIES POSITION_INDEPENDENT_CODE ON)
+# ========================================
+# Detect ROOT lib directory for RPATH
+# ========================================
+execute_process(
+  COMMAND root-config --libdir
+  OUTPUT_VARIABLE ROOT_LIBRARY_DIR
+  OUTPUT_STRIP_TRAILING_WHITESPACE
+)
 
-# Install dictionary lib and PCM
-install(TARGETS WignerDict LIBRARY DESTINATION lib)
+# ========================================
+# Shared library: WignerUtils (with dictionary)
+# ========================================
+add_library(WignerUtils SHARED ${SOURCES} G__WignerUtils.cxx)
+target_include_directories(WignerUtils PRIVATE ${INCLUDE_DIR} ${ROOT_INCLUDE_DIRS})
+target_link_libraries(WignerUtils PRIVATE ${ROOT_LIBRARIES})
+set_target_properties(WignerUtils PROPERTIES
+    POSITION_INDEPENDENT_CODE ON
+    INSTALL_RPATH "@loader_path/../lib;${ROOT_LIBRARY_DIR}"
+    BUILD_RPATH "@loader_path/../lib;${ROOT_LIBRARY_DIR}"
+)
+
+# Install main library and headers
+install(TARGETS WignerUtils LIBRARY DESTINATION lib)
+install(DIRECTORY ${INCLUDE_DIR}/ DESTINATION include FILES_MATCHING PATTERN "*.h")
+install(FILES
+    ${CMAKE_CURRENT_BINARY_DIR}/libWignerUtils_rdict.pcm
+    DESTINATION lib
+)
+
+# ========================================
+# Executable: wigneroot
+# ========================================
+add_executable(wigneroot ${SOURCE_DIR}/wigneroot.cpp)
+target_include_directories(wigneroot PRIVATE ${INCLUDE_DIR} ${ROOT_INCLUDE_DIRS})
+target_link_libraries(wigneroot PRIVATE WignerUtils ${ROOT_LIBRARIES})
+set_target_properties(wigneroot PROPERTIES
+    POSITION_INDEPENDENT_CODE ON
+    INSTALL_RPATH "@executable_path/../lib;${ROOT_LIBRARY_DIR}"
+    BUILD_RPATH "@executable_path/../lib;${ROOT_LIBRARY_DIR}"
+)
+
+# Install the executable
+install(TARGETS wigneroot RUNTIME DESTINATION bin)
+
 install(FILES
     ${CMAKE_CURRENT_BINARY_DIR}/libWignerUtils_rdict.pcm
     DESTINATION lib

@@ -82,8 +82,6 @@ With:
 
 This formulation incorporates both classical volume factors and quantum angular integration.
 
----
-
 ## Requirements
 
 - [ROOT Framework](https://root.cern/)
@@ -109,8 +107,18 @@ cd ..
 
 ## How to Run
 
+### Workflow
+
+The software is structured so that each source file is individually compiled and linked into shared libraries. These libraries, along with the ROOT dictionary, are then wrapped into a custom executable called `wigneroot`. This executable acts as a ROOT interpreter with all project-specific classes preloaded, allowing users to run macros directly without manual library loading or setup.
+
+### Usage
+
 ```bash
-root -l wignertest2.cpp
+source wignerenv.sh
+```
+
+```bash
+wigneroot -l wignertest2.cpp
 ```
 ## Docker
 

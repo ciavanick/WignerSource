@@ -29,7 +29,7 @@ public:
      * @brief Constructor with optional TF2 name suffix.
      * @param name Identifier suffix for internal TF2 functions.
      */
-    wignerSource(TString name = "");
+    wignerSource(TString name = "") : mName(name) {}
 
     /**
      * @brief Initialize all internal TF2 functions.

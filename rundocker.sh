@@ -60,7 +60,6 @@ mkdir -p wigner_output
 # Start building the Docker command
 DOCKER_CMD=(
   docker run
-  --platform linux/amd64
   --rm -it
   -v "$(pwd)/wigner_output:/wigner/$OUTDIR"
 )

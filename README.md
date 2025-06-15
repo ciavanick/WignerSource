@@ -34,8 +34,8 @@
   - [Docker-Based Execution](#docker-based-execution)
     - [Dockerfile](#dockerfile)
     - [rundocker.sh](#rundockersh)
--[Other Usage](#other-usage)
-  -[Example Usage](#example-usage)
+- [Other Usage](#other-usage)
+  - [Example Usage](#example-usage)
 
 ---
 
@@ -279,7 +279,11 @@ If Doxygen is not already installed:
   `brew install doxygen`
 
 #### Generate the Documentation
-
+After cloning the repository:
+```bash
+git clone https://github.com/ciavanick/WignerSource.git
+cd WignerSource
+```
 To generate the HTML and LaTeX documentation, run the following command from the project root (`WignerSource`):  
 `doxygen Doxyfile`
 

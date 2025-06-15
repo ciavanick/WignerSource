@@ -1,3 +1,5 @@
+#!/bin/bash
+
 # ------------------------------------------------------------------------------
 # rundocker.sh - Wrapper script for executing Wigner simulations in Docker
 #
@@ -24,7 +26,7 @@
 # ------------------------------------------------------------------------------
 
 
-#!/bin/bash
+
 set -euo pipefail
 
 

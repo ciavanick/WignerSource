@@ -1,5 +1,6 @@
 #include "CWignerSource.h"
 #include "CWignerUtils.h"
+#include <cstdlib>
 
 void wignerSource::initFunctions(bool testMode)
 {
@@ -66,7 +67,7 @@ void wignerSource::setRadius(double radius)
     if (radius < 0)
     {
         std::cerr << "Error: source radius is negative\n";
-        return;
+        std::abort();
     }
     mRadius = radius;
     mWxJ->SetParameter(0, 1.);
@@ -80,7 +81,7 @@ void wignerSource::setR0(double r0)
     if (r0 < 0)
     {
         std::cerr << "Error: r0 is negative\n";
-        return;
+        std::abort();
     }
     mR0 = r0;
 }
@@ -90,7 +91,7 @@ void wignerSource::setRadiusK(double k)
     if (k < 0)
     {
         std::cerr << "Error: k is negative\n";
-        return;
+        std::abort();
     }
     mKin = k;
     mRadius = wignerUtils::radius(k, mR0);
@@ -108,7 +109,7 @@ void wignerSource::setKstar(double k)
     if (k < 0)
     {
         std::cerr << "Error: k is negative\n";
-        return;
+        std::abort();
     }
     mKStar = wignerUtils::kStarEff(k, mRadius);
     mWxJ->SetParameter(0, 1.);
@@ -143,7 +144,7 @@ void wignerSource::setMu(double mu)
     if (mu < 0)
     {
         std::cerr << "Error: mu is negative\n";
-        return;
+        std::abort();
     }
     mMu = mu;
     reSetMu();
@@ -154,7 +155,7 @@ void wignerSource::setRWidth(double rWidth)
     if (rWidth < 0)
     {
         std::cerr << "Error: potential well width is negative\n";
-        return;
+        std::abort();
     }
     mRWidth = rWidth;
     reSetRWidth();

@@ -1,3 +1,5 @@
+#!/bin/bash
+
 # ------------------------------------------------------------------------------
 # simulation.sh - Runs parallel simulations and post-processing
 #
@@ -16,7 +18,7 @@
 # ------------------------------------------------------------------------------
 
 
-#!/bin/bash
+
 set -euo pipefail
 source wignerenv.sh
 

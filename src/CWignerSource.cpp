@@ -1,7 +1,7 @@
 #include "CWignerSource.h"
 #include "CWignerUtils.h"
 
-void wignerSource::initFunctions()
+void wignerSource::initFunctions(bool testMode)
 {
     mW = new TF2("w" + mName, wignerUtils::wignerSource, mRMin, mRMax, mPMin, mPMax, 3);
     mWxJ = new TF2("wxj" + mName, wignerUtils::jacobianFun, mRMin, mRMax, mPMin, mPMax, 3);
@@ -17,6 +17,7 @@ void wignerSource::initFunctions()
     mDInt = new TF2("WDInt" + mName, wignerUtils::wignerDeuteronIntegral, mRMin, mRMax, mPMin, mPMax, 0);
     mC = new TF2("CoalescenceProb" + mName, wignerUtils::coalescenceProbability, mRMin, mRMax, mPMin, mPMax, 3);
     setFunctionsParameters();
+    wignerUtils::testMode = testMode;
 }
 //_________________________________________________________________________
 void wignerSource::setThreeParam(TF2 *function)
@@ -62,6 +63,11 @@ void wignerSource::setFunctionsParameters()
 //_________________________________________________________________________
 void wignerSource::setRadius(double radius)
 {
+    if (radius < 0)
+    {
+        std::cerr << "Error: source radius is negative\n";
+        return;
+    }
     mRadius = radius;
     mWxJ->SetParameter(0, 1.);
     reSetRadius();
@@ -71,11 +77,21 @@ void wignerSource::setRadius(double radius)
 //_________________________________________________________________________
 void wignerSource::setR0(double r0)
 {
+    if (r0 < 0)
+    {
+        std::cerr << "Error: r0 is negative\n";
+        return;
+    }
     mR0 = r0;
 }
 //_________________________________________________________________________
 void wignerSource::setRadiusK(double k)
 {
+    if (k < 0)
+    {
+        std::cerr << "Error: k is negative\n";
+        return;
+    }
     mKin = k;
     mRadius = wignerUtils::radius(k, mR0);
     mKStar = wignerUtils::kStarEff(k, mRadius);
@@ -89,6 +105,11 @@ void wignerSource::setRadiusK(double k)
 // to check if it is useful
 void wignerSource::setKstar(double k)
 {
+    if (k < 0)
+    {
+        std::cerr << "Error: k is negative\n";
+        return;
+    }
     mKStar = wignerUtils::kStarEff(k, mRadius);
     mWxJ->SetParameter(0, 1.);
     reSetKStar();
@@ -119,12 +140,22 @@ void wignerSource::setRanges(double xmin, double ymin, double xmax, double ymax)
 //_________________________________________________________________________
 void wignerSource::setMu(double mu)
 {
+    if (mu < 0)
+    {
+        std::cerr << "Error: mu is negative\n";
+        return;
+    }
     mMu = mu;
     reSetMu();
 }
 //_________________________________________________________________________
 void wignerSource::setRWidth(double rWidth)
 {
+    if (rWidth < 0)
+    {
+        std::cerr << "Error: potential well width is negative\n";
+        return;
+    }
     mRWidth = rWidth;
     reSetRWidth();
 }
@@ -277,7 +308,7 @@ double wignerSource::getV0()
 //_________________________________________________________________________
 double wignerSource::getcoal()
 {
-    return wignerUtils::integral(mC)*(wignerUtils::getHCut()*2*TMath::Pi())*(wignerUtils::getHCut()*2*TMath::Pi())*(wignerUtils::getHCut()*2*TMath::Pi());
+    return wignerUtils::integral(mC) * (wignerUtils::getHCut() * 2 * TMath::Pi()) * (wignerUtils::getHCut() * 2 * TMath::Pi()) * (wignerUtils::getHCut() * 2 * TMath::Pi());
 }
 //_________________________________________________________________________
 double wignerSource::getDeuteronInt()
@@ -358,4 +389,70 @@ void wignerSource::reSetV0()
     mWK->SetParameter(5, mV0);
     mWV->SetParameter(5, mV0);
     mWH->SetParameter(5, mV0);
+}
+//_________________________________________________________________________
+void wignerSource::SetFromTxt(const std::string& txtfile)
+{
+    std::cout << "setting from file \n";
+    std::vector<double> params = readParamsFromFile(txtfile);
+    std::cout << "Params read\n";
+    if (params.size() < 8)
+    {
+        std::cerr << "Error: expected 8 parameters, got " << params.size() << "\n";
+        return;
+    }
+
+    double r0 = params[0];
+    double mu = params[1];
+    double rWidth = params[2];
+    double v0 = params[3];
+    double xmin = params[4];
+    double ymin = params[5];
+    double xmax = params[6];
+    double ymax = params[7];
+
+    setR0(r0);
+    setMu(mu);
+    setRWidth(rWidth);
+    setV0(v0);
+    setRanges(xmin, ymin, xmax, ymax);
+
+    std::cout << "#############################\n"
+              << "r0     = " << r0 << "\n"
+              << "mu     = " << mu << "\n"
+              << "rWidth = " << rWidth << "\n"
+              << "v0     = " << v0 << "\n"
+              << "Rmin   = " << xmin << "\n"
+              << "Pmin   = " << ymin << "\n"
+              << "Rmax   = " << xmax << "\n"
+              << "Pmax   = " << ymax << "\n"
+              << "#############################\n";
+}
+//_________________________________________________________________________
+std::vector<double> wignerSource::readParamsFromFile(const std::string& filename)
+{
+    std::cout << "reading parameters\n";
+    std::ifstream infile(filename);
+    std::vector<double> values;
+    std::string line;
+
+    if (!infile.is_open())
+    {
+        std::cerr << "Could not open file: " << filename << "\n";
+        throw std::runtime_error("File open failed.");
+    }
+    std::cout << "setting parameters\n";
+    while (std::getline(infile, line))
+    {
+        std::istringstream iss(line);
+        double val;
+        if (!(iss >> val))
+        {
+            std::cerr << "Warning: skipping invalid or empty line: " << line << "\n";
+            continue;
+        }
+        values.push_back(val);
+    }
+
+    return values;
 }

@@ -9,10 +9,12 @@ double wignerUtils::mMinP = 0.;
 double wignerUtils::mMaxP = 0.6;
 double wignerUtils::mDx = 0.01;
 double wignerUtils::mDp = 0.001;
-double wignerUtils::mFactor = sqrt(3./8) * mHCut;
+double wignerUtils::mFactor = sqrt(3. / 8) * mHCut;
 
 TFile *wignerUtils::mFileDeuteron = new TFile("deuteronFunction/wigner2.root", "READ");
 TH2D *wignerUtils::mH = (TH2D *)mFileDeuteron->Get("h");
+
+bool wignerUtils::testMode = false;
 //_________________________________________________________________________
 double wignerUtils::wignerSource(double *x, double *pm)
 {
@@ -157,14 +159,14 @@ double wignerUtils::coalescenceProbability(double *x, double *pm)
 //_________________________________________________________________________
 double wignerUtils::radius(double k, double r0)
 {
-    double radiusWave = mFactor/k;
-    return sqrt(radiusWave*radiusWave + r0*r0);
+    double radiusWave = mFactor / k;
+    return sqrt(radiusWave * radiusWave + r0 * r0);
 }
 //_________________________________________________________________________
 double wignerUtils::kStarEff(double k, double radius)
 {
-    double kstarWave = mFactor/radius;
-    return radius = sqrt(k*k - kstarWave*kstarWave);
+    double kstarWave = mFactor / radius;
+    return radius = sqrt(k * k - kstarWave * kstarWave);
 }
 //_________________________________________________________________________
 double wignerUtils::getMinX()
@@ -223,14 +225,20 @@ void wignerUtils::setIntegrationRanges(double minX, double maxX, double minP, do
 double wignerUtils::integral(TF2 *function, double minX, double maxX, double minP, double maxP)
 {
     double res = 0;
-    //res = function->Integral(minX, maxX, minP, maxP);
-    for (float x = mDx / 2 + minX; x < maxX; x += mDx)
-     {
-         for (float p = mDp / 2 + minP; p < maxP; p += mDp)
-         {
-             res += function->Eval(x, p);
-         }
-     }
-     res *= mDx * mDp;
+    if (testMode == false)
+    {
+        for (float x = mDx / 2 + minX; x < maxX; x += mDx)
+        {
+            for (float p = mDp / 2 + minP; p < maxP; p += mDp)
+            {
+                res += function->Eval(x, p);
+            }
+        }
+        res *= mDx * mDp;
+    }
+    else
+    {
+        res = function->Integral(minX, maxX, minP, maxP);
+    }
     return res;
 }

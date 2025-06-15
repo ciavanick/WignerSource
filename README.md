@@ -3,6 +3,41 @@
 **WignerSource** is a C++ module for computing and handling Wigner functions using the ROOT framework. It provides utilities for simulating quantum mechanical systems and visualizing phase space distributions.
 
 ---
+## Table of Contents
+- [Wigner Function Theory and Implementation](#wigner-function-theory-and-implementation)
+  - [Wigner Function from a Gaussian Source](#wigner-function-from-a-gaussian-source)
+  - [Energy Terms and Wigner-Weighted Integrals](#energy-terms-and-wigner-weighted-integrals)
+    - [Kinetic Energy](#kinetic-energy)
+    - [Potential Energy (Square-Well)](#potential-energy-square-well)
+    - [Total Hamiltonian](#total-hamiltonian)
+  - [Deuteron Coalescence Probability](#deuteron-coalescence-probability)
+- [File Structure](#file-structure)
+- [How the Code Works](#how-the-code-works)
+  - [Wigner Function Initialization](#wigner-function-initialization)
+  - [Parameter Management](#parameter-management)
+  - [Numerical Integration](#numerical-integration)
+  - [Observables Computed](#observables-computed)
+  - [Simulation Workflow](#simulation-workflow)
+  - [Plotting and Analysis](#plotting-and-analysis)
+- [Example of Results](#example-of-results)
+  - [Numerical Integration Accuracy](#numerical-integration-accuracy)
+  - [Coalescence Probability vs. k*](#coalescence-probability-vs-k)
+  - [Hamiltonian vs. k*](#hamiltonian-vs-k)
+  - [Kinetic Energy vs. k*](#kinetic-energy-vs-k)
+  - [Potential Energy vs. k*](#potential-energy-vs-k)
+- [Documentation](#documentation)
+  - [How to Generate the Documentation](#how-to-generate-the-documentation)
+- [Requirements](#requirements)
+- [How to Run](#how-to-run)
+  - [Manual Installation](#manual-installation)
+    - [Manual Run](#manual-run)
+  - [Docker-Based Execution](#docker-based-execution)
+    - [Dockerfile](#dockerfile)
+    - [rundocker.sh](#rundockersh)
+-[Other Usage](#other-usage)
+  -[Example Usage](#example-usage)
+
+---
 
 ## Wigner Function Theory and Implementation
 
@@ -118,6 +153,8 @@ This project is organized into the following directories and key files:
 - `rundocker.sh` — Wrapper for executing simulations inside Docker
 
 - `Dockerfile` — Docker image definition for building and running the environment
+
+- `WignerLinkDef.h` — ROOT dictionary generation configuration
 
 - `README.md` — Documentation and usage instructions (this file)
 ---
@@ -398,6 +435,24 @@ The result are the same of `Manual run`, but now they are inside the folder `wig
 #### Recommendation 
 Is recommended to run the simulation with as many cores jobs and memory as possible.
 Roughly on Docker runned on M1 machine with 8 cores and 12g of ram avaiable it needs around 10 minutes to fully simulate from a `k*` of 0.0001 to 1.0 with an increment of 0.005
+
+
+## Other Usage
+
+Since this project constitutes a **framework/library**, it is also possible to write your own macros—just like in ROOT—using the `wignerSource` and `wignerUtils` classes. These macros can then be run using the `wigneroot` interactive session.
+
+### Example Usage
+
+```bash
+wigneroot macros.C
+```
+
+> **Note**: Before running the macro, you must source the environment setup script **each time** you open a new shell:
+
+```bash
+source wignerenv.sh
+```
+
 
 
 ---

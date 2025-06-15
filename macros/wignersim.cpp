@@ -18,8 +18,8 @@
  *
  * All computed values are written to a ROOT TTree stored in the specified output file.
  *
- * @param range_start Starting value of k* (must be ≥ 0).
- * @param range_end   Ending value of k* (must be ≥ range_start).
+ * @param range_start Starting value of k* (must be >= 0).
+ * @param range_end   Ending value of k* (must be >= range_start).
  * @param increment   Step size in k*.
  * @param outfile     Output ROOT file name to store the TTree.
  * @param txtinput    Path to the input text file with Wigner source parameters.

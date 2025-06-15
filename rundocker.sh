@@ -1,42 +1,32 @@
-#!/bin/bash
-set -euo pipefail
-##
-# @addtogroup DockerSetup
-# @{
-##
-
-##
-# @file rundocker.sh
-# @brief Wrapper script for executing Wigner simulations in Docker.
+# ------------------------------------------------------------------------------
+# rundocker.sh - Wrapper script for executing Wigner simulations in Docker
 #
 # This script provides a convenient way to run Wigner simulations within a Docker
 # container. It mounts necessary volumes, sets optional resource limits (CPU and memory),
 # and optionally includes a configuration file.
 #
 # Usage:
-# @code
-# ./rundocker.sh <start> <end> <n_jobs> <increment> <output_folder> <file_prefix> [cpus] [memory] [config_file]
-# @endcode
-#
-# The configuration file is optional and can be omitted if not needed.
+#   ./rundocker.sh <start> <end> <n_jobs> <increment> <output_folder> <file_prefix> [cpus] [memory] [config_file]
 #
 # Example:
-# @code
-# ./rundocker.sh 0.001 2.0 8 0.005 simres res 8 12g input.txt
-# @endcode
+#   ./rundocker.sh 0.001 2.0 8 0.005 simres res 8 12g input.txt
 #
 # Arguments:
-# - `<start>`        : Starting k* value.
-# - `<end>`          : Ending k* value.
-# - `<n_jobs>`       : Number of parallel jobs.
-# - `<increment>`    : Step increment within jobs.
-# - `<output_folder>`: Directory in container for outputs (mapped to `wigner_output` on host).
-# - `<file_prefix>`  : Prefix for output files.
-# - `[cpus]`         : (Optional, but recommended) CPU limit.
-# - `[memory]`       : (Optional, but recommended) Memory limit.
-# - `[config_file]`  : (Optional) Configuration file path.
-#
-##
+# - <start>         : Starting k* value.
+# - <end>           : Ending k* value.
+# - <n_jobs>        : Number of parallel jobs.
+# - <increment>     : Step increment within jobs.
+# - <output_folder> : Directory in container for outputs (mapped to wigner_output on host).
+# - <file_prefix>   : Prefix for output files.
+# - [cpus]          : (Optional) CPU limit.
+# - [memory]        : (Optional) Memory limit.
+# - [config_file]   : (Optional) Path to the configuration file.
+# ------------------------------------------------------------------------------
+
+
+#!/bin/bash
+set -euo pipefail
+
 
 if [ "$#" -lt 6 ] || [ "$#" -gt 9 ]; then
     echo "Usage: $0 <start> <end> <n_jobs> <increment> <output_folder> <file_prefix> [config_file] [cpus] [memory]"
@@ -94,7 +84,3 @@ fi
 echo "Running simulation with:"
 printf '  %q\n' "${DOCKER_CMD[@]}"
 "${DOCKER_CMD[@]}"
-
-##
-# @}
-##

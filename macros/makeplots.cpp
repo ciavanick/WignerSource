@@ -4,7 +4,7 @@
  * @brief Generate and save plots from Wigner simulation output stored in a ROOT file.
  *
  * This macro opens a ROOT file containing a TTree named `"tree"` and generates
- * TGraph plots of coalescence probability, kinetic/potential/Hamiltonian energy vs. k* and r₀.
+ * TGraph plots of coalescence probability, kinetic/potential/Hamiltonian energy vs. k* and r0.
  * Each plot is saved as both a `.pdf` and `.root` file in the given output folder.
  *
  * Required tree branches:
@@ -19,7 +19,7 @@
  * @param filename  Name of the input ROOT file inside the folder (e.g., "data_merged.root").
  *
  * @note If any required branch or the TTree is missing, an error is printed and the function returns.
- * @note A cut on r₀ is applied (0 ≤ r₀ ≤ 10 fm) when plotting energies vs. r₀.
+ * @note A cut on r0 is applied (from 0 to 10 fm) when plotting energies vs. r0.
  */
 void makeplots(const char* folder, const char* filename)
 {

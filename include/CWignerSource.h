@@ -188,7 +188,7 @@ public:
 
     /**
      * @brief Check normalization of the WxW function.
-     * @return Integral result scaled by h^3.
+     * @return Integral result scaled by h^3, must be 1.
      */
     double checkWxW();
 
@@ -216,7 +216,7 @@ private:
 
     TF2 *mW = nullptr;            ///< Wigner function.
     TF2 *mWxW = nullptr;          ///< Wigner function squared.
-    TF2 *mWxJ = nullptr;          ///< Wigner × Jacobian.
+    TF2 *mWxJ = nullptr;          ///< Wigner x Jacobian.
     TF2 *mWxJforItself = nullptr; ///< Alternative Wigner × Jacobian.
     TF2 *mK = nullptr;            ///< Kinetic energy.
     TF2 *mV = nullptr;            ///< Potential energy.
@@ -247,7 +247,7 @@ private:
     void setSixParam(TF2 *function);
 
     /**
-     * @brief Calculate normalization for the Wigner × Jacobian function.
+     * @brief Calculate normalization for the Wigner × Jacobian function, must be 1.
      */
     void normalization();
 

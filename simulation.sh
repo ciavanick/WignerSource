@@ -1,34 +1,26 @@
-#!/bin/bash
-set -euo pipefail
-source wignerenv.sh
-
-##
-# @addtogroup BashScripts
-# @{
-##
-
-##
-# @file simulation.sh
-# @brief Run parallel Wigner simulations and merge outputs into a single ROOT file.
+# ------------------------------------------------------------------------------
+# simulation.sh - Runs parallel simulations and post-processing
 #
 # Usage:
-# @code
-# ./simulation.sh <start> <end> <n_jobs> <increment> <output_folder> <file_prefix> [config_file]
-# @endcode
+#   ./simulation.sh <start> <end> <n_jobs> <increment> <output_folder> <file_prefix> [config_file]
 #
 # Example:
-# @code
-# ./simulation.sh 0.001 2.0 8 0.005 simres res input.txt
-# @endcode
+#   ./simulation.sh 0.001 2.0 8 0.005 simres res input.txt
 #
-# Explanation of the example:
-# - Runs 8 parallel jobs covering the k* range from 0.001 to 2.0.
+# Explanation:
+# - Runs n parallel jobs covering the k* range from 0.001 to 2.0.
 # - Each job incrementally steps by 0.005 in the range.
 # - Output ROOT files are saved into the directory `simres/`.
 # - Files are named using the prefix `res`.
 # - Simulation parameters are read from `input.txt`.
-#
-##
+# ------------------------------------------------------------------------------
+
+
+#!/bin/bash
+set -euo pipefail
+source wignerenv.sh
+
+
 
 
 if [ "$#" -lt 6 ] || [ "$#" -gt 7 ]; then
@@ -79,7 +71,3 @@ echo "All done. Merged output: $MERGED"
 echo "Making the plots"
 
 wigneroot -l -q -b "macros/makeplots.cpp(\"$OUTDIR\",\"${PREFIX}_merged.root\")"
-
-##
-# @}
-##

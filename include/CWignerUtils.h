@@ -127,7 +127,7 @@ public:
     static double coalescenceProbability(double *x, double *pm);
 
     /**
-     * @brief Compute effective source radius based on k* and R₀.
+     * @brief Compute effective source radius based on k* and R0.
      * @param k Relative momentum (k*).
      * @param r0 Reference radius.
      * @return Effective radius.

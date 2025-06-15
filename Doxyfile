@@ -290,7 +290,8 @@ TAB_SIZE               = 4
 # with the commands \{ and \} for these it is advised to use the version @{ and
 # @} or use a double escape (\\{ and \\})
 
-ALIASES                =
+ALIASES += shfile="@file" \
+           shingroup="@ingroup BashScripts"
 
 # Set the OPTIMIZE_OUTPUT_FOR_C tag to YES if your project consists of C sources
 # only. Doxygen will then generate output that is more tailored for C. For
@@ -349,7 +350,7 @@ OPTIMIZE_OUTPUT_SLICE  = NO
 #
 # Note see also the list of default file extension mappings.
 
-EXTENSION_MAPPING      =
+EXTENSION_MAPPING      = 
 
 # If the MARKDOWN_SUPPORT tag is enabled then Doxygen pre-processes all comments
 # according to the Markdown format, which allows for more readable
@@ -991,7 +992,7 @@ WARN_LOGFILE           =
 # spaces. See also FILE_PATTERNS and EXTENSION_MAPPING
 # Note: If this tag is empty the current directory is searched.
 
-INPUT                  = src/CWignerSource.cpp include/CWignerSource.h src/CWignerUtils.cpp include/CWignerUtils.h src/wigneroot.cpp macros/wignersim.cpp macros/makeplots.cpp wignerenv.sh simulation.sh Dockerfile rundocker.sh
+INPUT                  = src/CWignerSource.cpp include/CWignerSource.h src/CWignerUtils.cpp include/CWignerUtils.h src/wigneroot.cpp macros/wignersim.cpp macros/makeplots.cpp wignerenv.sh simulation.sh Dockerfile rundocker.sh scripts.md
 
 # This tag can be used to specify the character encoding of the source files
 # that Doxygen parses. Internally Doxygen uses the UTF-8 encoding. Doxygen uses

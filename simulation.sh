@@ -21,7 +21,7 @@
 
 set -euo pipefail
 source wignerenv.sh
-
+export LC_NUMERIC=C
 
 
 

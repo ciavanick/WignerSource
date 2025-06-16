@@ -28,7 +28,7 @@
 
 
 set -euo pipefail
-
+export LC_NUMERIC=C
 
 if [ "$#" -lt 6 ] || [ "$#" -gt 9 ]; then
     echo "Usage: $0 <start> <end> <n_jobs> <increment> <output_folder> <file_prefix> [config_file] [cpus] [memory]"

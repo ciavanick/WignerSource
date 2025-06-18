@@ -64,12 +64,12 @@ Wrapper for launching simulations inside a Docker container, with optional CPU, 
 
 **Usage**:
 ```bash
-./rundocker.sh <start> <end> <n_jobs> <increment> <output_folder> <file_prefix> [cpus] [memory] [config_file]
+./rundocker.sh  <image_name> <start> <end> <n_jobs> <increment> <output_folder> <file_prefix> [cpus] [memory] [config_file]
 ```
 
 **Example**:
 ```bash
-./rundocker.sh 0.001 2.0 8 0.005 simres res 8 12g input.txt
+./rundocker.sh wignerutils 0.001 2.0 8 0.005 simres res 8 12g input.txt
 ```
 
 **Details**:

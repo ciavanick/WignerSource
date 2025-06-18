@@ -3,48 +3,31 @@
 # ------------------------------------------------------------------------------
 # rundocker.sh - Wrapper script for executing Wigner simulations in Docker
 #
-# This script provides a convenient way to run Wigner simulations within a Docker
-# container. It mounts necessary volumes, sets optional resource limits (CPU and memory),
-# and optionally includes a configuration file.
-#
 # Usage:
-#   ./rundocker.sh <start> <end> <n_jobs> <increment> <output_folder> <file_prefix> [cpus] [memory] [config_file]
+#   ./rundocker.sh <image_name> <start> <end> <n_jobs> <increment> <output_folder> <file_prefix> [cpus] [memory] [config_file]
 #
 # Example:
-#   ./rundocker.sh 0.001 2.0 8 0.005 simres res 8 12g input.txt
-#
-# Arguments:
-# - <start>         : Starting k* value.
-# - <end>           : Ending k* value.
-# - <n_jobs>        : Number of parallel jobs.
-# - <increment>     : Step increment within jobs.
-# - <output_folder> : Directory in container for outputs (mapped to wigner_output on host).
-# - <file_prefix>   : Prefix for output files.
-# - [cpus]          : (Optional) CPU limit.
-# - [memory]        : (Optional) Memory limit.
-# - [config_file]   : (Optional) Path to the configuration file.
+#   ./rundocker.sh wignerutils 0.001 2.0 8 0.005 simres res 8 12g input.txt
 # ------------------------------------------------------------------------------
-
-
 
 set -euo pipefail
 export LC_NUMERIC=C
 
-if [ "$#" -lt 6 ] || [ "$#" -gt 9 ]; then
-    echo "Usage: $0 <start> <end> <n_jobs> <increment> <output_folder> <file_prefix> [config_file] [cpus] [memory]"
+if [ "$#" -lt 7 ] || [ "$#" -gt 10 ]; then
+    echo "Usage: $0 <image_name> <start> <end> <n_jobs> <increment> <output_folder> <file_prefix> [cpus] [memory] [config_file]"
     exit 1
 fi
 
-START=$1
-END=$2
-NJOBS=$3
-INCREMENT=$4
-OUTDIR=$5
-PREFIX=$6
-CPUS=${7:-}
-MEMORY=${8:-}
-CONFIG_FILE=${9:-}
-
+IMAGE_NAME=$1
+START=$2
+END=$3
+NJOBS=$4
+INCREMENT=$5
+OUTDIR=$6
+PREFIX=$7
+CPUS=${8:-}
+MEMORY=${9:-}
+CONFIG_FILE=${10:-}
 
 # Ensure the output folder exists on host
 mkdir -p wigner_output
@@ -75,7 +58,7 @@ if [[ -n "$CONFIG_FILE" ]]; then
 fi
 
 # Append image and simulation args
-DOCKER_CMD+=("wignerutils" "$START" "$END" "$NJOBS" "$INCREMENT" "$OUTDIR" "$PREFIX")
+DOCKER_CMD+=("$IMAGE_NAME" "$START" "$END" "$NJOBS" "$INCREMENT" "$OUTDIR" "$PREFIX")
 
 # Append config file as the final argument if provided
 if [[ -n "$CONFIG_FILE" ]]; then

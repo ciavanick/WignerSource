@@ -413,9 +413,10 @@ Wrapper for launching simulations inside a Docker container, with optional CPU, 
 chmod +x rundocker.sh
 ```
 ```bash
-./rundocker.sh <start> <end> <n_jobs> <increment> <output_folder> <file_prefix> [cpus] [memory] [config_file]
+./rundocker.sh  <image_name> <start> <end> <n_jobs> <increment> <output_folder> <file_prefix> [cpus] [memory] [config_file]
 ```
 where:
+- `<image_name>` is the image name,
 - `<start>` is the  starting `k*` value, 
 - `<end>` is the last `k*` value, 
 - `<n_jobs>` is the number of jobs, since the simulation runs on multi-jobs,
@@ -428,11 +429,11 @@ where:
 
 **Example**:
 ```bash
-./rundocker.sh 0.001 2.0 8 0.005 simres res 8 12g input.txt
+./rundocker.sh wignerutils 0.001 2.0 8 0.005 simres res 8 12g input.txt
 ```
 or 
 ```bash
-./rundocker.sh 0.001 2.0 8 0.005 simres res 8 12g
+./rundocker.sh wignerutils 0.001 2.0 8 0.005 simres res 8 12g
 ```
 The result are the same of `Manual run`, but now they are inside the folder `wigner_output`
 

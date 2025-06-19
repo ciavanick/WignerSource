@@ -437,6 +437,8 @@ or
 ```
 The result are the same of `Manual run`, but now they are inside the folder `wigner_output`
 
+> **Note**: you may need to give `sudo` permissions to build and run the container.
+
 #### Recommendation 
 Is recommended to run the simulation with as many cores jobs and memory as possible.
 Roughly on Docker runned on M1 machine with 8 cores and 12g of ram avaiable it needs around 10 minutes to fully simulate from a `k*` of 0.0001 to 1.0 with an increment of 0.005
